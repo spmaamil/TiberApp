@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Tiber</string>
+    <string name="title_activity_profile_interface">ProfileInterface</string>
+    <string name="title_activity_user_profile">UserProfile</string>
+    <string name="title_activity_xlarge_note_layout">activity_xlarge_note_layout</string>
+    <string name="title_activity_bottom_menu">bottom_menu</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
