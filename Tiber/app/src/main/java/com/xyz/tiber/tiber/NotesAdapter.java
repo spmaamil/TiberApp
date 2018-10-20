@@ -8,8 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterSession;
 
 import java.util.List;
 
@@ -17,7 +23,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public Image notesImage;
+        public ImageView notesImage;
         public TextView notesUserName;
         public TextView notesUserTag;
         public TextView notesUserMessage;
@@ -28,7 +34,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
             notesUserName = (TextView) itemView.findViewById(R.id.userName);
             notesUserTag = (TextView) itemView.findViewById(R.id.userTag);
             notesUserMessage = (TextView) itemView.findViewById(R.id.userMessage);
-
+            notesImage = (ImageView) itemView.findViewById(R.id.imageView);
         }
     }
 
@@ -63,9 +69,6 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         final Notes note = notes.get(i);
 
         viewHolder.notesUserName.setText(note.getUserName());
-        viewHolder.notesUserTag.setText(note.getUserTag());
-        viewHolder.notesUserMessage.setText(note.getMessage());
-
         viewHolder.notesUserName.setOnClickListener(new View.OnClickListener()
         {
 
@@ -73,19 +76,51 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), pos+ "", Toast.LENGTH_LONG).show();
                 Intent i = new Intent(v.getContext(),ProfileInterface.class);
+                TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+                TwitterAuthToken auth=session.getAuthToken();
+                i.putExtra("auth",auth.token);
+                i.putExtra("auth_token",auth.secret);
                 i.putExtra("User",note);
                 v.getContext().startActivity(i);
             }
         });
 
-        /*userTag.setOnClickListener(new View.OnClickListener() {
+        viewHolder.notesUserTag.setText(note.getUserTag());
+        viewHolder.notesUserTag.setOnClickListener(new View.OnClickListener()
+        {
+
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(UserInterface,ProfileInterface.class);
+                Toast.makeText(v.getContext(), pos+ "", Toast.LENGTH_LONG).show();
+                Intent i = new Intent(v.getContext(),ProfileInterface.class);
+                TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+                TwitterAuthToken auth=session.getAuthToken();
+                i.putExtra("auth",auth.token);
+                i.putExtra("auth_token",auth.secret);
+                i.putExtra("User",note);
+                v.getContext().startActivity(i);
             }
         });
-        TextView userMessage = viewHolder.notesUserMessage;
-        userMessage.setText(note.getMessage());*/
+
+
+        viewHolder.notesUserMessage.setText(note.getMessage());
+        viewHolder.notesUserMessage.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent i = new Intent(v.getContext(), ExpandedMessage.class);
+                TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+                TwitterAuthToken auth=session.getAuthToken();
+                i.putExtra("auth",auth.token);
+                i.putExtra("auth_token",auth.secret);
+                i.putExtra("Note",note);
+                v.getContext().startActivity(i);
+            }
+        });
+
+        Picasso.get().load(note.getUserImageUrl()).into(viewHolder.notesImage);
+
     }
 
     @Override

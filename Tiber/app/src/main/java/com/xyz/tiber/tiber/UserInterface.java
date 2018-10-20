@@ -16,6 +16,10 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.twitter.sdk.android.core.TwitterAuthToken;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterSession;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -45,12 +49,23 @@ public class UserInterface extends AppCompatActivity
     private RecyclerView rvNotes;
     private NotesAdapter adapter;
     private UserInterface context;
+    private String USER_AUTH;// = "1053700578130493440-WQwiPr1Bfgb2qIMPJtrjQLcxACH9qO";
+    private String USER_AUTH_TOKEN;// = "NfFi7l8Da5PKK2zueuPQopm4OVsdXMOJMRTgy8to8TAkc";
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_interface);
+
+
+        Intent i = getIntent();
+        if (TwitterCore.getInstance().getSessionManager().getActiveSession() != null) {
+            TwitterSession session = TwitterCore.getInstance().getSessionManager().getActiveSession();
+            TwitterAuthToken authToken = session.getAuthToken();
+            USER_AUTH = authToken.token;
+            USER_AUTH_TOKEN = authToken.secret;
+        }
 
         context = this;
 
@@ -72,7 +87,6 @@ public class UserInterface extends AppCompatActivity
 
         final BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNav);
         bottomNavigationView.setSelectedItemId(R.id.navigation_home);
-        bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
@@ -80,7 +94,6 @@ public class UserInterface extends AppCompatActivity
                 if(menuItem.getItemId() == R.id.navigation_dashboard)
                 {
                     Intent i = new Intent(bottomNavigationView.getContext(),UserProfile.class);
-                    //i.putExtra("User",note);
                     bottomNavigationView.getContext().startActivity(i);
                     return true;
                 }
@@ -169,7 +182,7 @@ public class UserInterface extends AppCompatActivity
             try
             {
 
-                URL url = new URL("http://cislinux.cs.ksu.edu:5000/home");
+                URL url = new URL("http://cslinux.cs.ksu.edu:5000/home");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setRequestProperty("Content-Type","application/json;charset=UTF-8");
@@ -177,10 +190,8 @@ public class UserInterface extends AppCompatActivity
                 conn.setDoInput(true);
 
                 JSONObject jsonParam = new JSONObject();
-                jsonParam.put("access_token","1053482017134911488-AcVB7TcyjWJFcWUoT0qW7mW8OUkS1P");
-                jsonParam.put("access_token_secret","x4QhDcxLXJncbNHBEYBKTU5kXcZcmIxI3Hab9ufc8Il9B");
-                //if(args != null)
-                //    jsonParam.put(args[0],args[1]);
+                jsonParam.put("access_token",USER_AUTH);
+                jsonParam.put("access_token_secret",USER_AUTH_TOKEN);
 
                 Log.i("JSON",jsonParam.toString());
                 DataOutputStream os = new DataOutputStream(conn.getOutputStream());

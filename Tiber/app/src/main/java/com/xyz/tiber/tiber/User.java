@@ -1,6 +1,8 @@
 package com.xyz.tiber.tiber;
 
-public class User
+import java.io.Serializable;
+
+public class User implements Serializable
 {
     private String userId;
     private String userName;

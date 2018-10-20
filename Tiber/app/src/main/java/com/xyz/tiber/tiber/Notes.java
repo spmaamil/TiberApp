@@ -12,12 +12,17 @@ public class Notes implements Serializable
     private String userImageUrl;
     private String noteId;
 
+    public String getUserImageUrl() {
+        return userImageUrl;
+    }
+
     public Notes(String uIL, String uD, String uN, String uT, String m, String nD)
     {
         userImageUrl = uIL;
         userId = uD;
         userName = uN;
         userTag = uT;
+
         message = m;
         noteId = nD;
     }
