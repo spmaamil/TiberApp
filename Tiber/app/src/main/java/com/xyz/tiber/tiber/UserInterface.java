@@ -44,13 +44,15 @@ public class UserInterface extends AppCompatActivity
     private List<Notes> notes;
     private RecyclerView rvNotes;
     private NotesAdapter adapter;
-    private  OkHttpClient client;
+    private UserInterface context;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_interface);
+
+        context = this;
 
         rvNotes = (RecyclerView) findViewById(R.id.rvNotes);
         notes = new ArrayList<>();
@@ -66,6 +68,27 @@ public class UserInterface extends AppCompatActivity
         rvNotes.setLayoutManager(new LinearLayoutManager(this));
 
         callServer();
+
+
+        final BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottomNav);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_home);
+        bottomNavigationView.setSelectedItemId(R.id.navigation_dashboard);
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+
+                if(menuItem.getItemId() == R.id.navigation_dashboard)
+                {
+                    Intent i = new Intent(bottomNavigationView.getContext(),UserProfile.class);
+                    //i.putExtra("User",note);
+                    bottomNavigationView.getContext().startActivity(i);
+                    return true;
+                }
+
+                return false;
+            }
+        });
+
 
 //        Toast.makeText(this, json, Toast.LENGTH_LONG);
 

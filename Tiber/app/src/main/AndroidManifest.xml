@@ -21,6 +21,9 @@
         <activity
             android:name=".ProfileInterface"
             android:label="@string/title_activity_profile_interface" />
+        <activity
+            android:name=".UserProfile"
+            android:label="UserProfile" />
     </application>
 
 </manifest>

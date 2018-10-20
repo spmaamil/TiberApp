@@ -49,10 +49,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.ViewHolder> 
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View notes;
-        if(large)
-            notes = inflater.inflate(R.layout.activity_large_note_layout,viewGroup,false);
-        else
-            notes = inflater.inflate(R.layout.activity_small_note_layout,viewGroup,false);
+        notes = inflater.inflate(R.layout.activity_large_note_layout,viewGroup,false);
 
         ViewHolder viewHolder = new ViewHolder(notes);
         return viewHolder;
